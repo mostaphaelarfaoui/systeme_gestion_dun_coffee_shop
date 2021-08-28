@@ -13,18 +13,19 @@ class CreateMenuSaleTable extends Migration
      */
     public function up()
     {
-        Schema::table('menu_sale', function (Blueprint $table) {
+        Schema::create('menu_sale', function (Blueprint $table) {
             $table->id();
             $table->bigInteger("menu_id")->unsigned();
             $table->bigInteger("sales_id")->unsigned();
             $table->foreign("menu_id")
                 ->references("id")
-                ->on("menu")
+                ->on("menus")
                 ->onDelete("cascade");
             $table->foreign("sales_id")
                 ->references("id")
                 ->on("sales")
                 ->onDelete("cascade");
+            $table->timestamps();
         });
     }
 
@@ -35,8 +36,6 @@ class CreateMenuSaleTable extends Migration
      */
     public function down()
     {
-        Schema::table('menu_sale', function (Blueprint $table) {
-            $table->drop(["sales_id", "menu_id"]);
-        });
+        Schema::dropIfExists('menu_sale');
     }
 }

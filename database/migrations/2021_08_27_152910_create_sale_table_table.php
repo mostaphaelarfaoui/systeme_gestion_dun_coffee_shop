@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSaleTable extends Migration
+class CreateSaleTableTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateSaleTable extends Migration
      */
     public function up()
     {
-        Schema::table('sale_table', function (Blueprint $table) {
+        Schema::create('sale_table', function (Blueprint $table) {
             $table->id();
             $table->bigInteger("table_id")->unsigned();
             $table->bigInteger("sales_id")->unsigned();
@@ -25,6 +25,7 @@ class CreateSaleTable extends Migration
                 ->references("id")
                 ->on("sales")
                 ->onDelete("cascade");
+            $table->timestamps();
         });
     }
 
@@ -35,8 +36,6 @@ class CreateSaleTable extends Migration
      */
     public function down()
     {
-        Schema::table('sale_table', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('sale_table');
     }
 }
