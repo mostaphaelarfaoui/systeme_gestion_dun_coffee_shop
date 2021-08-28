@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Symfony\Contracts\Service\Attribute\Required;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +20,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return view('management.categories.index')->with(
+            [
+                "categories" => Category::paginate(8)
+            ]);
     }
 
     /**
@@ -24,7 +33,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('management.categories.create');
     }
 
     /**
@@ -35,7 +44,20 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validaton
+        $this->validate($request, [
+            "title" => "Required|min:4"
+        ]);
+        // Store Data
+        $title = $request->title;
+        Category::create([
+            "title" => $title,
+            "slug" => Str::slug($title)
+        ]);
+        // Redirect
+        return redirect()->route("categories.index")->with([
+            "success" => "Catégorie ajoutée"
+        ]);
     }
 
     /**
@@ -57,7 +79,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view("management.categories.create")->with([
+            "category" => $category
+        ]);
     }
 
     /**
@@ -69,7 +93,20 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        // Validaton
+        $this->validate($request, [
+            "title" => "Required|min:4"
+        ]);
+        // Store Data
+        $title = $request->title;
+        $category->update([
+            "title" => $title,
+            "slug" => Str::slug($title)
+        ]);
+        // Redirect
+        return redirect()->route("categories.index")->with([
+            "success" => "Catégorie modifiée"
+        ]);
     }
 
     /**
@@ -80,6 +117,11 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        // Delete Category
+        $category->delete();
+        // Redirect
+        return redirect()->route("categories.index")->with([
+            "success" => "Catégorie supprimée"
+        ]);
     }
 }
