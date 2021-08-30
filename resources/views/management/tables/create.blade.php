@@ -13,16 +13,25 @@
                             </div>
                             <div class="col-md-8">
                                 <h3 class="text-secondary border-bottom mb-3 p-2">
-                                    <i class="fas fa-plus"></i> Ajouter une catégorie
+                                    <i class="fas fa-plus"></i> Ajouter une table
                                 </h3>
-                                <form action="{{ route("categories.store") }}" method="post">
+                                <form action="{{ route("tables.store") }}" method="post">
                                     @csrf
                                     <div class="form-group">
                                         <input
-                                            type="text" name="title" id="title"
+                                            type="text" name="name" id="name"
                                             class="form-control"
-                                            placeholder="Titre"
+                                            placeholder="Nom"
                                         >
+                                    </div>
+                                    <div class="form-group">
+                                        <select name="status" class="form-control">
+                                            <option value="" selected disabled>
+                                                Disponible
+                                            </option>
+                                            <option value="1">Oui</option>
+                                            <option value="0">Non</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <button class="btn btn-primary">

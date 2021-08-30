@@ -22,7 +22,7 @@ class CategoryController extends Controller
     {
         return view('management.categories.index')->with(
             [
-                "categories" => Category::paginate(8)
+                "categories" => Category::paginate(6)
             ]);
     }
 

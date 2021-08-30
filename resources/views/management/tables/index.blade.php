@@ -14,9 +14,9 @@
                             <div class="col-md-8">
                                 <div class="d-flex flex-row justify-content-between align-items-center border-bottom pb-1">
                                     <h3 class="text-secondary">
-                                        <i class="fas fa-th-list"></i> Catégories
+                                        <i class="fas fa-chair"></i> Tables
                                     </h3>
-                                    <a href="{{ route("categories.create") }}" class="btn btn-primary">
+                                    <a href="{{ route("tables.create") }}" class="btn btn-primary">
                                         <i class="fas fa-plus fa-x2"></i>
                                     </a>
                                 </div>
@@ -24,31 +24,43 @@
                                     <thead>
                                         <tr>
                                             <th>Id</th>
-                                            <th>Titre</th>
+                                            <th>Nom</th>
+                                            <th>Disponible</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($categories as $category)
+                                        @foreach ($tables as $table)
                                             <tr>
                                                 <td>
-                                                    {{ $category->id }}
+                                                    {{ $table->id }}
                                                 </td>
                                                 <td>
-                                                    {{ $category->title }}
+                                                    {{ $table->name }}
+                                                </td>
+                                                <td>
+                                                    @if ($table->status)
+                                                        <span class="badge badge-success">
+                                                            Oui
+                                                        </span>
+                                                    @else
+                                                        <span class="badge badge-danger">
+                                                            Non
+                                                        </span>
+                                                    @endif
                                                 </td>
                                                 <td class="d-flex flex-row justify-content-center align-items-center">
-                                                    <a href="{{ route("categories.edit",$category->slug) }}" class="btn btn-warning mr-1">
+                                                    <a href="{{ route("tables.edit",$table->slug) }}" class="btn btn-warning mr-1">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
-                                                    <form id="{{ $category->id }}" action="{{ route("categories.destroy",$category->slug) }}" method="post">
+                                                    <form id="{{ $table->id }}" action="{{ route("tables.destroy",$table->slug) }}" method="post">
                                                         @csrf
                                                         @method("DELETE")
                                                         <button
                                                             onclick="
                                                                 event.preventDefault();
-                                                                if(confirm('Voulez vous supprimer la catégorie {{ $category->title }} ?'))
-                                                                document.getElementById({{ $category->id }}).submit()
+                                                                if(confirm('Voulez vous supprimer la table {{ $table->name }} ?'))
+                                                                document.getElementById({{ $table->id }}).submit()
                                                             "
                                                             class="btn btn-danger">
                                                             <i class="fas fa-trash"></i>
@@ -60,7 +72,7 @@
                                     </tbody>
                                 </table>
                                 <div class="my-3 d-flex justify-content-center align-items-center">
-                                    {{ $categories->links() }}
+                                    {{ $tables->links() }}
                                 </div>
                             </div>
                         </div>

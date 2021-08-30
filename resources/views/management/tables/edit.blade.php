@@ -13,16 +13,27 @@
                             </div>
                             <div class="col-md-8">
                                 <h3 class="text-secondary border-bottom mb-3 p-2">
-                                    <i class="fas fa-plus"></i> Ajouter une catégorie
+                                    <i class="fas fa-plus"></i> Modifier la table {{ $table->name }}
                                 </h3>
-                                <form action="{{ route("categories.store") }}" method="post">
+                                <form action="{{ route("tables.update", $table->slug) }}" method="post">
                                     @csrf
+                                    @method("PUT")
                                     <div class="form-group">
                                         <input
-                                            type="text" name="title" id="title"
+                                            type="text" name="name" id="name"
                                             class="form-control"
-                                            placeholder="Titre"
+                                            placeholder="Nom"
+                                            value="{{  $table->name }}"
                                         >
+                                    </div>
+                                    <div class="form-group">
+                                        <select name="status" class="form-control">
+                                            <option value="" disabled>
+                                                Disponible
+                                            </option>
+                                            <option {{ $table->status === 1 ? "selected" : "" }} value="1">Oui</option>
+                                            <option {{ $table->status === 0 ? "selected" : "" }} value="0">Non</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <button class="btn btn-primary">
