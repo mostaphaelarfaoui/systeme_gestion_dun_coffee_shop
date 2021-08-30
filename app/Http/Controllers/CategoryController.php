@@ -79,7 +79,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view("management.categories.create")->with([
+        return view("management.categories.edit")->with([
             "category" => $category
         ]);
     }
@@ -95,7 +95,7 @@ class CategoryController extends Controller
     {
         // Validaton
         $this->validate($request, [
-            "title" => "Required|min:4"
+            "title" => "Required|min:3"
         ]);
         // Store Data
         $title = $request->title;
