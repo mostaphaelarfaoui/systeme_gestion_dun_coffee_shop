@@ -3,10 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Servants;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
 class ServantsController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -14,8 +19,13 @@ class ServantsController extends Controller
      */
     public function index()
     {
-        //
+        return view('management.serveurs.index')->with(
+            [
+                "servants" => Servants::paginate(6)
+            ]
+        );
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -24,7 +34,7 @@ class ServantsController extends Controller
      */
     public function create()
     {
-        //
+        return view('management.serveurs.create');
     }
 
     /**
@@ -35,7 +45,21 @@ class ServantsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //validation
+        $this->validate($request, [
+            "name" => "required|min:3",
+        ]);
+        //store data
+        $name = $request->name;
+        Servants::create([
+            "name" => $name,
+            "slug" => Str::slug($name),
+            "address" => $request->address,
+        ]);
+        //redirect user
+        return redirect()->route("servants.index")->with([
+            "success" => "serveur ajoutée avec succés"
+        ]);
     }
 
     /**
@@ -55,9 +79,11 @@ class ServantsController extends Controller
      * @param  \App\Servants  $servants
      * @return \Illuminate\Http\Response
      */
-    public function edit(Servants $servants)
+    public function edit($id)
     {
-        //
+        return view("management.serveurs.edit")->with([
+            "servant" => Servants::findOrFail($id)
+        ]);
     }
 
     /**
@@ -67,9 +93,24 @@ class ServantsController extends Controller
      * @param  \App\Servants  $servants
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Servants $servants)
+    public function update(Request $request,$id)
     {
-        //
+        // Validaton
+        $this->validate($request, [
+            "name" => "Required|min:4",
+        ]);
+        // Update Data
+        $name = $request->name;
+        $servant = Servants::findOrFail($id);
+        $servant->update([
+            "name" => $name,
+            "slug" => Str::slug($name),
+            "address" => $request->adress
+        ]);
+        // Redirect
+        return redirect()->route("servants.index")->with([
+            "success" => "serveur modifiée"
+        ]);
     }
 
     /**
@@ -78,8 +119,14 @@ class ServantsController extends Controller
      * @param  \App\Servants  $servants
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Servants $servants)
+    public function destroy( $id)
     {
-        //
+        // Delete Category
+        $servant = Servants::findOrFail($id);
+        $servant->delete();
+        // Redirect
+        return redirect()->route("servants.index")->with([
+            "success" => "serveur supprimée"
+        ]);
     }
 }
