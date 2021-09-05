@@ -25,3 +25,4 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('categories', 'CategoryController');
 Route::resource('tables', 'TableController');
 Route::resource('servants', 'ServantsController');
+Route::resource('menus', 'MenuController');
